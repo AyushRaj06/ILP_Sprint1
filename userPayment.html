@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <a href="home.html">Home</a>
+            <a href="#" id="logout">Logout</a>
+        </div>
+        <div class="welcome" id="welcomeUser">Welcome</div>
+    </div>
+    <div class="container">
+        <h2>Payment Page</h2>
+        <p>Bill Amount: <span id="billAmount"></span></p>
+        <label for="paymentMode">Mode of Payment:</label>
+        <select id="paymentMode">
+            <option value="credit">Credit Card</option>
+            <option value="debit">Debit Card</option>
+        </select>
+        <button id="payNow">Pay Now</button>
+        <button id="backHome">Back to Booking</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+            document.getElementById("welcomeUser").innerText = `Welcome ${user.userId}`;
+            document.getElementById("billAmount").innerText = localStorage.getItem("billAmount") || "$0";
+
+            document.getElementById("logout").addEventListener("click", function () {
+                localStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            });
+            document.getElementById("payNow").addEventListener("click", function () {
+                window.location.href = "card-payment.html";
+            });
+            document.getElementById("backHome").addEventListener("click", function () {
+                window.location.href = "booking.html";
+            });
+        });
+    </script>
+</body>
+</html>
+
+<!-- card-payment.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Payment</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Enter Card Details</h2>
+        <form id="paymentForm">
+            <label>Credit Card:</label>
+            <input type="text" value="Credit Card" readonly>
+            <label>Card No:</label>
+            <input type="text" id="cardNo" pattern="\d{16}" required>
+            <label>Card Holder Name:</label>
+            <input type="text" id="cardHolder" required>
+            <label>Expiry Date:</label>
+            <input type="text" id="expiry" pattern="\d{2}/\d{2}" required>
+            <label>CVV:</label>
+            <input type="text" id="cvv" pattern="\d{3}" required>
+            <button type="submit">Make Payment</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById("paymentForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const bookingId = Math.floor(Math.random() * 1000000);
+            alert(`Payment Successful! Booking ID: ${bookingId}`);
+            window.location.href = "invoice.html";
+        });
+    </script>
+</body>
+</html>

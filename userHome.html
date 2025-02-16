@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <a href="home.html">Home</a>
+            <a href="userBooking.html">Booking Service</a>
+            <a href="userTracking.html">Tracking</a>
+            <a href="userPrevious-bookings.html">Previous Booking</a>
+            <a href="userSupport.html">Contact Support</a>
+            <a href="#" id="logout">Logout</a>
+        </div>
+        <div class="welcome" id="welcomeUser">Welcome</div>
+    </div>
+    <div class="container">
+        <h1>Welcome to Your Dashboard</h1>
+        <p>Select an option from the menu above to proceed.</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+            document.getElementById("welcomeUser").innerText = `Welcome ${user.userId}`;
+
+            document.getElementById("logout").addEventListener("click", function () {
+                localStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+</body>
+</html>

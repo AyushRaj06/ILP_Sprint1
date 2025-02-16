@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="welcome" id="welcomeMessage"></div>
+    </nav>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const userName = localStorage.getItem("userName");
+            if (userName) {
+                document.getElementById("welcomeMessage").textContent = "Welcome " + userName;
+            }
+        });
+    </script>
+</body>
+</html>

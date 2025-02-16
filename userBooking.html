@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <a href="home.html">Home</a>
+            <a href="booking.html">Booking Service</a>
+            <a href="tracking.html">Tracking</a>
+            <a href="previous-bookings.html">Previous Booking</a>
+            <a href="support.html">Contact Support</a>
+            <a href="#" id="logout">Logout</a>
+        </div>
+        <div class="welcome" id="welcomeUser">Welcome</div>
+    </div>
+    <div class="container">
+        <h1>Welcome to Your Dashboard</h1>
+        <p>Select an option from the menu above to proceed.</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+            document.getElementById("welcomeUser").innerText = `Welcome ${user.userId}`;
+
+            document.getElementById("logout").addEventListener("click", function () {
+                localStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+</body>
+</html>
+
+<!-- booking.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Service</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Booking Service</h2>
+        <form id="bookingForm">
+            <h3>Sender Information</h3>
+            <input type="text" id="senderName" readonly>
+            <input type="text" id="senderAddress" readonly>
+            <input type="text" id="senderContact" readonly>
+            
+            <h3>Receiver Information</h3>
+            <input type="text" id="receiverName" placeholder="Receiver Name" required>
+            <textarea id="receiverAddress" placeholder="Receiver Address" required></textarea>
+            <input type="text" id="receiverPin" placeholder="Pin Code" required pattern="\d{6}">
+            <input type="text" id="receiverContact" placeholder="Contact Number" required pattern="\d{10}">
+            
+            <h3>Parcel Details</h3>
+            <input type="text" id="parcelSize" placeholder="Size & Weight" required>
+            <textarea id="parcelDesc" placeholder="Contents Description" required></textarea>
+            
+            <h3>Shipping Options</h3>
+            <select id="shippingSpeed">
+                <option value="standard">Standard</option>
+                <option value="express">Express</option>
+            </select>
+            <select id="packaging">
+                <option value="standard">Standard Packaging</option>
+                <option value="custom">Custom Packaging</option>
+                <option value="eco">Eco-friendly Packaging</option>
+                <option value="fragile">Fragile Item Handling</option>
+            </select>
+            
+            <h3>Date & Time Selection</h3>
+            <input type="datetime-local" id="pickupTime" required>
+            
+            <h3>Service Cost & Payment</h3>
+            <input type="text" id="serviceCost" readonly>
+            <select id="paymentMethod">
+                <option value="credit">Credit Card</option>
+                <option value="debit">Debit Card</option>
+                <option value="paypal">PayPal</option>
+            </select>
+            
+            <h3>Additional Services</h3>
+            <input type="checkbox" id="insurance"> Insurance
+            <input type="checkbox" id="tracking"> Tracking Service
+            
+            <button type="submit">Confirm Booking</button>
+        </form>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+            
+            document.getElementById("senderName").value = user.customerName;
+            document.getElementById("senderAddress").value = user.address;
+            document.getElementById("senderContact").value = user.mobile;
+            
+            document.getElementById("bookingForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+                alert("Booking Confirmed!");
+                window.location.href = "home.html";
+            });
+        });
+    </script>
+</body>
+</html>

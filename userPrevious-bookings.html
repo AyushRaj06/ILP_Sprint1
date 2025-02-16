@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previous Bookings</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <a href="home.html">Home</a>
+            <a href="booking.html">Booking Service</a>
+            <a href="tracking.html">Tracking</a>
+            <a href="previous-bookings.html">Previous Booking</a>
+            <a href="support.html">Contact Support</a>
+            <a href="#" id="logout">Logout</a>
+        </div>
+        <div class="welcome" id="welcomeUser">Welcome</div>
+    </div>
+    <div class="container">
+        <h2>Previous Bookings</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Booking ID</th>
+                    <th>Booking Date</th>
+                    <th>Receiver Name</th>
+                    <th>Delivered Address</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="bookingHistory"></tbody>
+        </table>
+        <button id="prevPage">Previous</button>
+        <button id="nextPage">Next</button>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+            document.getElementById("welcomeUser").innerText = `Welcome ${user.userId}`;
+
+            document.getElementById("logout").addEventListener("click", function () {
+                localStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            });
+
+            const bookingData = JSON.parse(localStorage.getItem("bookingHistory")) || [];
+            const recordsPerPage = 5;
+            let currentPage = 0;
+
+            function renderTable() {
+                const tableBody = document.getElementById("bookingHistory");
+                tableBody.innerHTML = "";
+                const start = currentPage * recordsPerPage;
+                const end = start + recordsPerPage;
+                const pageData = bookingData.slice(start, end);
+                pageData.forEach(booking => {
+                    const row = `<tr>
+                        <td>${booking.customerId}</td>
+                        <td>${booking.bookingId}</td>
+                        <td>${booking.bookingDate}</td>
+                        <td>${booking.receiverName}</td>
+                        <td>${booking.deliveredAddress}</td>
+                        <td>${booking.amount}</td>
+                        <td>${booking.status}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            }
+            
+            document.getElementById("prevPage").addEventListener("click", function () {
+                if (currentPage > 0) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+            
+            document.getElementById("nextPage").addEventListener("click", function () {
+                if ((currentPage + 1) * recordsPerPage < bookingData.length) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+            
+            renderTable();
+        });
+    </script>
+</body>
+</html>
