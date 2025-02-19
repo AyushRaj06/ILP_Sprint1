@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <a href="home.html">Home</a>
+            <a href="booking.html">Booking Service</a>
+            <a href="tracking.html">Tracking</a>
+            <a href="previous-bookings.html">Previous Booking</a>
+            <a href="support.html">Contact Support</a>
+            <a href="#" id="logout">Logout</a>
+        </div>
+        <div class="welcome" id="welcomeUser">Welcome</div>
+    </div>
+    <div class="container">
+        <h2>Track Your Package</h2>
+        <input type="text" id="trackingId" placeholder="Enter 12-digit Booking ID" maxlength="12">
+        <button id="trackButton">Search</button>
+        <div id="trackingResult"></div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+            document.getElementById("welcomeUser").innerText = `Welcome ${user.userId}`;
+
+            document.getElementById("logout").addEventListener("click", function () {
+                localStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            });
+
+            document.getElementById("trackButton").addEventListener("click", function () {
+                const bookingId = document.getElementById("trackingId").value.trim();
+                const bookingData = JSON.parse(localStorage.getItem("bookingHistory")) || [];
+                
+                const booking = bookingData.find(b => b.bookingId === bookingId);
+                
+                const resultDiv = document.getElementById("trackingResult");
+                if (booking) {
+                    resultDiv.innerHTML = `<p>Status: <strong>${booking.status}</strong></p>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Booking ID not found. Please check and try again.</p>`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
