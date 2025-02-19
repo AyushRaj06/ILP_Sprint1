@@ -23,5 +23,28 @@
         <p>Payment Time: <span id="paymentTime"></span></p>
         <button onclick="window.print()">Print Invoice</button>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const booking = JSON.parse(localStorage.getItem("currentBooking"));
+            if (!booking) {
+                alert("No booking details found. Redirecting to home page.");
+                window.location.href = "home.html";
+                return;
+            }
+            document.getElementById("receiverName").innerText = booking.receiverName;
+            document.getElementById("receiverAddress").innerText = booking.receiverAddress;
+            document.getElementById("receiverPin").innerText = booking.receiverPin;
+            document.getElementById("receiverMobile").innerText = booking.receiverMobile;
+            document.getElementById("parcelWeight").innerText = booking.parcelWeight;
+            document.getElementById("parcelContents").innerText = booking.parcelContents;
+            document.getElementById("parcelDelivery").innerText = booking.parcelDelivery;
+            document.getElementById("parcelPacking").innerText = booking.parcelPacking;
+            document.getElementById("parcelPickup").innerText = booking.parcelPickup;
+            document.getElementById("parcelDropoff").innerText = booking.parcelDropoff;
+            document.getElementById("serviceCost").innerText = booking.serviceCost;
+            document.getElementById("paymentTime").innerText = booking.paymentTime;
+        });
+    </script>
 </body>
 </html>
