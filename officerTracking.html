@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Shipped Packages</h2>
+        <input type="text" id="searchCustomerId" placeholder="Enter Customer ID">
+        <input type="text" id="searchBookingId" placeholder="Enter Booking ID">
+        <button onclick="searchPackage()">Search</button>
+        
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Booking ID</th>
+                    <th>Booking Date</th>
+                    <th>Receiver Name</th>
+                    <th>Delivered Address</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="packageTable">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const packages = [
+            { customerId: "C12345", bookingId: "B987654321012", bookingDate: "2025-02-10", receiverName: "John Doe", deliveredAddress: "123 Street, NY", amount: "$100", status: "Delivered" },
+            { customerId: "C67890", bookingId: "B123456789012", bookingDate: "2025-02-12", receiverName: "Alice Smith", deliveredAddress: "456 Avenue, LA", amount: "$150", status: "In Transit" },
+        ];
+
+        function displayPackages(data) {
+            const tableBody = document.getElementById("packageTable");
+            tableBody.innerHTML = "";
+            data.forEach(pkg => {
+                const row = `<tr>
+                    <td>${pkg.customerId}</td>
+                    <td>${pkg.bookingId}</td>
+                    <td>${pkg.bookingDate}</td>
+                    <td>${pkg.receiverName}</td>
+                    <td>${pkg.deliveredAddress}</td>
+                    <td>${pkg.amount}</td>
+                    <td>${pkg.status}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+        
+        function searchPackage() {
+            const customerId = document.getElementById("searchCustomerId").value.trim();
+            const bookingId = document.getElementById("searchBookingId").value.trim();
+            const filteredPackages = packages.filter(pkg => 
+                (customerId === "" || pkg.customerId.includes(customerId)) &&
+                (bookingId === "" || pkg.bookingId.includes(bookingId))
+            );
+            displayPackages(filteredPackages);
+        }
+
+        displayPackages(packages);  // Load initial data
+    </script>
+</body>
+</html>

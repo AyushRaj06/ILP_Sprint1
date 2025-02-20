@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcel Booking</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Parcel Booking</h2>
+        <form id="bookingForm">
+            <h3>Sender Information</h3>
+            <label>Name: <input type="text" id="senderName" required></label>
+            <label>Address: <textarea id="senderAddress" required></textarea></label>
+            <label>Contact: <input type="tel" id="senderContact" pattern="[0-9]{10}" required></label>
+
+            <h3>Receiver Information</h3>
+            <label>Name: <input type="text" id="receiverName" required></label>
+            <label>Address: <textarea id="receiverAddress" required></textarea></label>
+            <label>Pin Code: <input type="text" id="receiverPin" pattern="[0-9]{6}" required></label>
+            <label>Contact: <input type="tel" id="receiverMobile" pattern="[0-9]{10}" required></label>
+
+            <h3>Parcel Details</h3>
+            <label>Size and Weight: <input type="text" id="parcelWeight" required></label>
+            <label>Contents Description: <textarea id="parcelContents" required></textarea></label>
+
+            <h3>Shipping Options</h3>
+            <label>Delivery Speed:
+                <select id="parcelDelivery">
+                    <option value="Standard">Standard</option>
+                    <option value="Express">Express</option>
+                </select>
+            </label>
+            <label>Packing Preference:
+                <select id="parcelPacking">
+                    <option value="Standard">Standard Packaging</option>
+                    <option value="Custom">Custom Packaging</option>
+                    <option value="Eco">Eco-friendly Packaging</option>
+                    <option value="Fragile">Fragile Item Handling</option>
+                </select>
+            </label>
+
+            <h3>Date and Time Selection</h3>
+            <label>Pickup/Drop-off Time: <input type="datetime-local" id="parcelPickup" required></label>
+
+            <h3>Service Cost and Payment</h3>
+            <p>Service Cost: <span id="serviceCost">$0.00</span></p>
+            <label>Payment Method:
+                <select id="paymentMethod">
+                    <option value="Credit">Credit Card</option>
+                    <option value="Debit">Debit Card</option>
+                </select>
+            </label>
+            
+            <h3>Additional Services</h3>
+            <label><input type="checkbox" id="insurance"> Insurance Option</label>
+            <label><input type="checkbox" id="tracking"> Tracking Service</label>
+
+            <button type="submit">Submit Booking</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("bookingForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const booking = {
+                senderName: document.getElementById("senderName").value,
+                senderAddress: document.getElementById("senderAddress").value,
+                senderContact: document.getElementById("senderContact").value,
+                receiverName: document.getElementById("receiverName").value,
+                receiverAddress: document.getElementById("receiverAddress").value,
+                receiverPin: document.getElementById("receiverPin").value,
+                receiverMobile: document.getElementById("receiverMobile").value,
+                parcelWeight: document.getElementById("parcelWeight").value,
+                parcelContents: document.getElementById("parcelContents").value,
+                parcelDelivery: document.getElementById("parcelDelivery").value,
+                parcelPacking: document.getElementById("parcelPacking").value,
+                parcelPickup: document.getElementById("parcelPickup").value,
+                serviceCost: document.getElementById("serviceCost").innerText,
+                paymentMethod: document.getElementById("paymentMethod").value,
+                insurance: document.getElementById("insurance").checked,
+                tracking: document.getElementById("tracking").checked,
+            };
+            localStorage.setItem("currentBooking", JSON.stringify(booking));
+            alert("Booking successful!");
+            window.location.href = "invoice.html";
+        });
+    </script>
+</body>
+</html>

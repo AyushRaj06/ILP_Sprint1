@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Shipped Packages</h2>
+        <input type="text" id="searchCustomerId" placeholder="Enter Customer ID">
+        <input type="text" id="searchBookingId" placeholder="Enter Booking ID">
+        <button onclick="searchPackage()">Search</button>
+        
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Booking ID</th>
+                    <th>Booking Date</th>
+                    <th>Receiver Name</th>
+                    <th>Delivered Address</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody id="packageTable">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container">
+        <h2>Schedule Pickup</h2>
+        <input type="text" id="pickupBookingId" placeholder="Enter Booking ID">
+        <input type="datetime-local" id="pickupDateTime">
+        <button onclick="schedulePickup()">Save</button>
+        <p id="pickupMessage" style="color: green;"></p>
+    </div>
+
+    <div class="container">
+        <h2>Officer Booking History</h2>
+        <input type="text" id="historyCustomerId" placeholder="Enter Customer ID">
+        <input type="date" id="historyStartDate">
+        <input type="date" id="historyEndDate">
+        <button onclick="searchHistory()">Search</button>
+        
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Booking ID</th>
+                    <th>Booking Date</th>
+                    <th>Receiver Name</th>
+                    <th>Delivered Address</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="historyTable">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const packages = [
+            { customerId: "C12345", bookingId: "B987654", bookingDate: "2025-02-10", receiverName: "John Doe", deliveredAddress: "123 Street, NY", amount: "$100", status: "Delivered" },
+            { customerId: "C67890", bookingId: "B123456", bookingDate: "2025-02-12", receiverName: "Alice Smith", deliveredAddress: "456 Avenue, LA", amount: "$150", status: "In Transit" },
+        ];
+
+        function displayPackages(data, tableId) {
+            const tableBody = document.getElementById(tableId);
+            tableBody.innerHTML = "";
+            data.forEach(pkg => {
+                const row = `<tr>
+                    <td>${pkg.customerId}</td>
+                    <td>${pkg.bookingId}</td>
+                    <td>${pkg.bookingDate}</td>
+                    <td>${pkg.receiverName}</td>
+                    <td>${pkg.deliveredAddress}</td>
+                    <td>${pkg.amount}</td>
+                    <td>${pkg.status}</td>
+                    ${tableId === "packageTable" ? `<td>
+                        <select onchange="updateStatus('${pkg.bookingId}', this.value)">
+                            <option value="Picked up">Picked up</option>
+                            <option value="In Transit">In Transit</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Returned">Returned</option>
+                        </select>
+                    </td>` : ""}
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+        
+        function searchPackage() {
+            const customerId = document.getElementById("searchCustomerId").value.trim();
+            const bookingId = document.getElementById("searchBookingId").value.trim();
+            const filteredPackages = packages.filter(pkg => 
+                (customerId === "" || pkg.customerId.includes(customerId)) &&
+                (bookingId === "" || pkg.bookingId.includes(bookingId))
+            );
+            displayPackages(filteredPackages, "packageTable");
+        }
+
+        function schedulePickup() {
+            const bookingId = document.getElementById("pickupBookingId").value.trim();
+            const dateTime = document.getElementById("pickupDateTime").value;
+            const messageElement = document.getElementById("pickupMessage");
+            
+            if (!bookingId || !dateTime) {
+                messageElement.style.color = "red";
+                messageElement.textContent = "Please enter a valid Booking ID and Date/Time.";
+                return;
+            }
+            
+            localStorage.setItem(`pickup_${bookingId}`, dateTime);
+            messageElement.style.color = "green";
+            messageElement.textContent = "Pickup scheduled successfully!";
+        }
+
+        function updateStatus(bookingId, newStatus) {
+            const packageIndex = packages.findIndex(pkg => pkg.bookingId === bookingId);
+            if (packageIndex !== -1) {
+                packages[packageIndex].status = newStatus;
+                displayPackages(packages, "packageTable");
+                alert(`Status updated to ${newStatus} for Booking ID: ${bookingId}`);
+            }
+        }
+
+        function searchHistory() {
+            const customerId = document.getElementById("historyCustomerId").value.trim();
+            const startDate = document.getElementById("historyStartDate").value;
+            const endDate = document.getElementById("historyEndDate").value;
+            
+            const filteredHistory = packages.filter(pkg => 
+                (customerId === "" || pkg.customerId.includes(customerId)) &&
+                (startDate === "" || new Date(pkg.bookingDate) >= new Date(startDate)) &&
+                (endDate === "" || new Date(pkg.bookingDate) <= new Date(endDate))
+            );
+            
+            displayPackages(filteredHistory, "historyTable");
+        }
+
+        displayPackages(packages, "packageTable");
+    </script>
+</body>
+</html>
